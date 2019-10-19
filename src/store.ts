@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 const store: StoreOptions<RootState> = {
   state: {
-    version: '0.0.1'
+    version: process.env.VUE_APP_VERSION || '0.0.1'
   },
   getters: {
     version (state: RootState) {

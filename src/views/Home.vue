@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <div>
-      {{ version }}
+      <router-link to="/about">About</router-link>
       <div>
         How much does
         <input
-          type="text"
+          type="search"
           placeholder="a bowl of maggi"
           :value="product"
           @input="inputProduct"
@@ -29,6 +29,10 @@
         {{ cities }}
       </div>
     </div>
+
+    <router-link to="/view">
+      <button>Submit</button>
+    </router-link>
 
     <router-view></router-view>
   </div>
@@ -58,7 +62,6 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters(['version']),
     ...mapGetters('product', ['position', 'city', 'cities', 'product'])
   }
 })
