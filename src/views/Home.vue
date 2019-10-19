@@ -1,8 +1,15 @@
 <template>
   <div class="home">
     <div>
+      {{ version }}
       <div>
-        How much does <input type="text" placeholder="a bowl of maggi" />
+        How much does
+        <input
+          type="text"
+          placeholder="a bowl of maggi"
+          :value="product"
+          @input="inputProduct"
+        />
       </div>
       <br />
 
@@ -13,68 +20,46 @@
           placeholder="city"
           :value="city"
           name="city"
-          @input="updateInput"
+          @input="inputCity"
         />?
       </div>
       <br />
 
-      <div v-if="searchResults.length">
-        {{ searchResults }}
+      <div v-if="cities.length">
+        {{ cities }}
       </div>
     </div>
 
     <router-view></router-view>
-
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import Position from '@/types/position'
-import { getClosestCity, searchCities } from '@/models/cities'
+import { mapGetters, mapActions } from 'vuex'
 
 export default Vue.extend({
   components: {},
-  data () {
-    return {
-      position: {} as Position,
-      city: '' as string
-    }
-  },
   mounted () {
     this.getGeolocation()
   },
   methods: {
-    getGeolocation () {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(({ coords }) => {
-          const { latitude, longitude } = coords
-          this.position = {
-            latitude,
-            longitude
-          }
-          const city = getClosestCity(this.position)
-          if (city && city.name) {
-            this.city = city.name
-          }
-        })
-      } else {
-      }
+    ...mapActions('product', ['getGeolocation', 'updateCity', 'updateProduct']),
+
+    inputCity (evt: KeyboardEvent) {
+      const target = evt.currentTarget as HTMLInputElement
+      this.updateCity(target.value)
     },
 
-    updateInput (evt: KeyboardEvent) {
+    inputProduct (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
-      this.city = target.value
+      this.updateProduct(target.value)
     }
   },
 
   computed: {
-    searchResults (): String[] {
-      if (this.city.length < 3) {
-        return []
-      }
-      return searchCities(this.city)
-    }
+    ...mapGetters(['version']),
+    ...mapGetters('product', ['position', 'city', 'cities', 'product'])
   }
 })
 </script>
