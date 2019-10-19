@@ -1,5 +1,8 @@
 import cities from 'cities.json'
+import City from '@/types/city'
 import Position from '@/types/position'
+
+export const getCities = () => cities.map((city: City) => city.name)
 
 const distance = (a: Position, b: Position) => {
   return Math.sqrt(
@@ -10,14 +13,14 @@ const distance = (a: Position, b: Position) => {
   )
 }
 
-export const getClosestCity = ({ latitude, longitude }) => {
+export const getClosestCity = ({ latitude, longitude }: Position) => {
   return cities.reduce(
-    (prev, next) => {
+    (prev: Position, next: City) => {
       const prevDistance = distance({ latitude, longitude }, prev)
       const nextPoint = {
         ...next,
-        latitude: parseFloat(next.lat, 10),
-        longitude: parseFloat(next.lng, 10)
+        latitude: next.lat,
+        longitude: next.lng
       }
       const nextDistance = distance({ latitude, longitude }, nextPoint)
       if (prevDistance < nextDistance) {
@@ -29,7 +32,7 @@ export const getClosestCity = ({ latitude, longitude }) => {
   )
 }
 
-export const searchCities = keyword => {
+export const searchCities = (keyword: string) => {
   const keywordLower = keyword.toLowerCase()
   const result = []
   for (let { name } of cities) {
