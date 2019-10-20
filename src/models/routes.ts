@@ -1,0 +1,7 @@
+export const ABOUT = '/about'
+export const INDEX = '/'
+export const LOGIN = '/login'
+export const LOGOUT = '/logout'
+export const SUGGEST = '/suggest'
+export const THANK_YOU = '/thank-you'
+export const VIEW = '/view'

@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <div>
+      <router-link to="/logout">Logout</router-link>
       <router-link to="/about">About</router-link>
       <div>
         How much does
