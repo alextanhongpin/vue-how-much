@@ -3,6 +3,7 @@ import { ActionTree } from 'vuex'
 // Types.
 import RootState from '@/types/root-state'
 import ProductState from '@/types/product-state'
+import Product from '@/types/product'
 
 // Models.
 import { getClosestCity } from '@/models/cities'
@@ -27,14 +28,18 @@ const actions: ActionTree<ProductState, RootState> = {
     commit('SET_CITY', city)
   },
 
-  updateProduct ({ commit }, product: string) {
-    commit('SET_PRODUCT', product)
+  updateKeyword ({ commit }, keyword: string) {
+    commit('SET_KEYWORD', keyword)
     commit(
       'SET_THROTTLE',
       window.setTimeout(() => {
-        console.log(product, 'debounced')
+        console.log(keyword, 'debounced')
       }, 250)
     )
+  },
+
+  updateProduct ({ commit }, product: Product) {
+    commit('SET_PRODUCT', product)
   }
 }
 

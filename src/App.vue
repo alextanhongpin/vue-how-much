@@ -7,6 +7,7 @@
 </template>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=B612:400,700&display=swap');
 #app {
   min-height: 100vh;
 }
@@ -18,11 +19,17 @@ textarea {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   color: #2c3e50;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'B612', sans-serif;
 }
 .main {
   margin: auto;
   max-width: 800px;
   width: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
 }
 </style>

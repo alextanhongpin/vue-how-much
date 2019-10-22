@@ -1,16 +1,19 @@
 <template>
-  <div class="home">
+  <div class="home-page">
+    <app-header></app-header>
     <div>
       <router-link to="/logout">Logout</router-link>
       <router-link to="/about">About</router-link>
       <div>
         How much does
-        <input
-          type="search"
-          placeholder="a bowl of maggi"
-          :value="product"
-          @input="inputProduct"
-        />
+        <router-link to="/search">
+          <input
+            type="search"
+            placeholder="a bowl of maggi"
+            :value="keyword"
+            readonly
+          />
+        </router-link>
       </div>
       <br />
 
@@ -31,8 +34,22 @@
       </div>
     </div>
 
+    <div>
+      <h1>
+        Results
+      </h1>
+
+      <price-list
+        v-bind="product"
+        v-for="product in productPrices"
+        :key="product.id"
+      ></price-list>
+    </div>
+
+    <br />
+
     <router-link to="/view">
-      <button>Submit</button>
+      <button class="button">Find out</button>
     </router-link>
 
     <router-view></router-view>
@@ -41,10 +58,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import AppHeader from '@/components/AppHeader'
+import PriceList from '@/components/PriceList'
 import { mapGetters, mapActions } from 'vuex'
 
 export default Vue.extend({
-  components: {},
+  components: {
+    AppHeader,
+    PriceList
+  },
   mounted () {
     this.getGeolocation()
   },
@@ -54,33 +76,33 @@ export default Vue.extend({
     inputCity (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
       this.updateCity(target.value)
-    },
-
-    inputProduct (evt: KeyboardEvent) {
-      const target = evt.currentTarget as HTMLInputElement
-      this.updateProduct(target.value)
     }
   },
 
   computed: {
-    ...mapGetters('product', ['position', 'city', 'cities', 'product'])
+    ...mapGetters('product', [
+      'position',
+      'city',
+      'cities',
+      'product',
+      'keyword',
+      'productPrices'
+    ])
   }
 })
 </script>
 <style lang="scss" scoped>
-.home {
+@import '@/styles.scss';
+.home-page {
   height: 100%;
+  padding: 30px;
 }
+
 input {
-  background: #eee;
-  border: none;
-  height: 40px;
-  padding: 0 10px;
+  @extend %input;
 }
+
 .button {
-  height: 40px;
-  padding: 0 20px;
-  background: #eee;
-  border: 1px solid #ddd;
+  @extend %button;
 }
 </style>

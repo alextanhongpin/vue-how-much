@@ -1,32 +1,44 @@
 <template>
-  <form v-on:submit.prevent>
-    <h1>Login</h1>
-    <div>
-      <p>
-        <label for="email">Email</label>
-      </p>
-      <input id="email" type="email" name="email" v-model="email" required />
-    </div>
-    <br />
+  <div class="login-page">
+    <form v-on:submit.prevent>
+      <h1>Login</h1>
+      <div>
+        <p>
+          <label for="email" class="label">Email</label>
+        </p>
+        <input
+          class="input"
+          id="email"
+          type="email"
+          name="email"
+          v-model="email"
+          required
+        />
+      </div>
+      <br />
 
-    <div>
-      <p>
-        <label for="password">Password</label>
-      </p>
-      <input
-        id="password"
-        type="password"
-        name="password"
-        v-model="password"
-        autocomplete
-        required
-      />
-    </div>
-    <br />
+      <div>
+        <p>
+          <label for="password" class="label">Password</label>
+        </p>
+        <input
+          id="password"
+          class="input"
+          type="password"
+          name="password"
+          v-model="password"
+          autocomplete
+          required
+        />
+      </div>
+      <br />
 
-    <button @click="submit" :disabled="loading">Continue</button>
-    {{ error }}
-  </form>
+      <button class="button" @click="submit" :disabled="loading">
+        Continue
+      </button>
+      {{ error }}
+    </form>
+  </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
@@ -53,3 +65,27 @@ export default Vue.extend({
   }
 })
 </script>
+<style lang="scss" scoped>
+@import '@/styles.scss';
+.login-page {
+  padding: 30px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.input {
+  @extend %input;
+  max-width: 240px;
+  width: 100%;
+}
+
+.button {
+  @extend %button;
+  width: 100%;
+  max-width: 240px;
+}
+</style>

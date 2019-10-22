@@ -1,5 +1,6 @@
 import { MutationTree } from 'vuex'
 import ProductState from '@/types/product-state'
+import Product from '@/types/product'
 import Position from '@/types/position'
 
 const mutations: MutationTree<ProductState> = {
@@ -11,8 +12,12 @@ const mutations: MutationTree<ProductState> = {
     state.city = city
   },
 
-  SET_PRODUCT (state: ProductState, product: string) {
+  SET_PRODUCT (state: ProductState, product: Product) {
     state.product = product
+  },
+
+  SET_KEYWORD (state: ProductState, keyword: string) {
+    state.keyword = keyword
   },
 
   SET_THROTTLE (state: ProductState, throttle: number) {

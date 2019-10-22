@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import {
   ABOUT,
   INDEX,
+  SEARCH,
   SUGGEST,
   THANK_YOU,
   VIEW,
@@ -58,6 +59,11 @@ export default new Router({
       path: LOGOUT,
       name: 'logout',
       component: () => import('./views/Logout.vue')
+    },
+    {
+      path: SEARCH,
+      name: 'search',
+      component: () => import('./views/Search.vue')
     },
     {
       path: '*',
