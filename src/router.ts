@@ -22,24 +22,7 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
-      meta: { requiresAuth: true },
-      children: [
-        {
-          path: VIEW,
-          component: () => import('./views/Home/View.vue'),
-          meta: { requiresAuth: true }
-        },
-        {
-          path: THANK_YOU,
-          component: () => import('./views/Home/ThankYou.vue'),
-          meta: { requiresAuth: true }
-        },
-        {
-          path: SUGGEST,
-          component: () => import('./views/Home/Suggest.vue'),
-          meta: { requiresAuth: true }
-        }
-      ]
+      meta: { requiresAuth: true }
     },
     {
       path: ABOUT,
@@ -58,12 +41,24 @@ export default new Router({
     {
       path: LOGOUT,
       name: 'logout',
-      component: () => import('./views/Logout.vue')
+      component: () => import('./views/Logout.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: SEARCH,
       name: 'search',
-      component: () => import('./views/Search.vue')
+      component: () => import('./views/Search.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: SUGGEST,
+      component: () => import('./views/Suggest.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: THANK_YOU,
+      component: () => import('./views/ThankYou.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '*',

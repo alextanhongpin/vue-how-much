@@ -21,12 +21,12 @@ const products: Product[] = PRODUCTS.split(', ').map((name, id) => {
 })
 const productPrices: ProductPrice[] = products.flatMap(
   ({ name, id }: Product) => {
-    return Array(Math.ceil(Math.random() * 10 + 5))
+    return Array(3)
       .fill()
       .map((_, i) => {
         return {
           productId: id,
-          price: Math.random() * 250,
+          price: parseFloat((Math.random() * 250).toFixed(2)),
           upvotes: Math.ceil(Math.random() * 100),
           downvotes: Math.ceil(Math.random() * 100)
         }

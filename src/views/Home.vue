@@ -1,9 +1,9 @@
 <template>
   <div class="home-page">
-    <app-header></app-header>
     <div>
       <router-link to="/logout">Logout</router-link>
       <router-link to="/about">About</router-link>
+
       <div>
         How much does
         <router-link to="/search">
@@ -12,25 +12,10 @@
             placeholder="a bowl of maggi"
             :value="keyword"
             readonly
+            disabled="true"
           />
         </router-link>
-      </div>
-      <br />
-
-      <div>
-        cost in
-        <input
-          type="search"
-          placeholder="city"
-          :value="city"
-          name="city"
-          @input="inputCity"
-        />?
-      </div>
-      <br />
-
-      <div v-if="cities.length">
-        {{ cities }}
+        cost?
       </div>
     </div>
 
@@ -46,25 +31,17 @@
       ></price-list>
     </div>
 
-    <br />
-
-    <router-link to="/view">
-      <button class="button">Find out</button>
-    </router-link>
-
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import AppHeader from '@/components/AppHeader'
 import PriceList from '@/components/PriceList'
 import { mapGetters, mapActions } from 'vuex'
 
 export default Vue.extend({
   components: {
-    AppHeader,
     PriceList
   },
   mounted () {

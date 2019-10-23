@@ -21,11 +21,7 @@
     </div>
     <br />
 
-    <div>
-      No results found
-      <router-link to="/suggest">Suggest</router-link>
-    </div>
-    <div>
+    <div v-if="products.length">
       <div
         v-for="product in products"
         :key="product.id"
@@ -35,6 +31,10 @@
       >
         {{ product.name }}
       </div>
+    </div>
+    <div v-else>
+      No results found
+      <router-link to="/suggest">Suggest</router-link>
     </div>
   </div>
 </template>

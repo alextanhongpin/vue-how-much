@@ -1,15 +1,30 @@
 <template>
   <div id="app">
     <main class="main">
+      <app-header></app-header>
       <router-view />
     </main>
   </div>
 </template>
+<script lang="ts">
+import Vue from 'vue'
+import AppHeader from '@/components/AppHeader'
+
+export default Vue.extend({
+  components: {
+    AppHeader
+  }
+})
+</script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=B612:400,700&display=swap');
+@import '@/styles.scss';
 #app {
   min-height: 100vh;
+}
+
+.mono {
+  font-family: 'B612 Mono', monospace;
 }
 
 #app,
@@ -25,6 +40,7 @@ textarea {
   margin: auto;
   max-width: 800px;
   width: 100%;
+  padding: 30px;
 }
 
 *,

@@ -1,7 +1,10 @@
 <template>
   <div>
     <h3>
-      {{ price }}
+      <div class="mono">
+        {{ price }}
+      </div>
+
       <i class="icon material-icons" title="thumb up" @click="upvote"
         >thumb_up</i
       >
