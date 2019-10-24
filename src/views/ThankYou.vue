@@ -1,6 +1,9 @@
 <template>
   <div>
-    Thanks you for submitting.
-    <router-link to="/">Go back</router-link>
+    <h1>Submitted</h1>
+    <p>
+      Thank you for submitting! ❤️
+    </p>
+    <router-link to="/">Go to home</router-link>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="suggest-page">
-    <router-link to="/">Back</router-link>
+    <router-link :to="backUrl">Back</router-link>
 
     <form v-on:submit.prevent>
       <div>
@@ -44,7 +44,11 @@ import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 export default Vue.extend({
   computed: {
-    ...mapGetters('product', ['keyword'])
+    ...mapGetters('product', ['keyword']),
+
+    backUrl () {
+      return this.$route.query.redirect || '/'
+    }
   },
 
   mounted () {

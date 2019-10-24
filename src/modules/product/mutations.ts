@@ -12,7 +12,7 @@ const mutations: MutationTree<ProductState> = {
     state.city = city
   },
 
-  SET_PRODUCT (state: ProductState, product: Product) {
+  SET_PRODUCT (state: ProductState, product?: Product) {
     state.product = product
   },
 

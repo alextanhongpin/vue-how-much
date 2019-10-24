@@ -10,8 +10,8 @@
         @input="inputKeyword"
       />
 
-      <button class="button" v-if="hasKeyword" @click="cancel">
-        Cancel
+      <button class="button" v-if="hasKeyword" @click="clear">
+        Clear
       </button>
       <button class="button" v-else>
         <router-link to="/">
@@ -21,7 +21,7 @@
     </div>
     <br />
 
-    <div v-if="products.length">
+    <div v-if="!showSuggest">
       <div
         v-for="product in products"
         :key="product.id"
@@ -33,8 +33,8 @@
       </div>
     </div>
     <div v-else>
-      No results found
-      <router-link to="/suggest">Suggest</router-link>
+      No results found.
+      <router-link :to="suggestUrl">Suggest.</router-link>
     </div>
   </div>
 </template>
@@ -45,24 +45,37 @@ import { mapGetters, mapActions } from 'vuex'
 export default Vue.extend({
   computed: {
     ...mapGetters('product', ['keyword', 'products', 'productWithId']),
+
     hasKeyword () {
       return this.keyword.length > 0
+    },
+
+    showSuggest () {
+      return this.hasKeyword && !this.products.length
+    },
+
+    suggestUrl () {
+      return `/suggest?redirect=${this.$route.path}`
     }
   },
+
   methods: {
     ...mapActions('product', ['updateKeyword', 'updateProduct']),
 
-    cancel () {
+    clear () {
       this.updateKeyword('')
+      this.updateProduct(null)
     },
 
     inputKeyword (evt: KeyboardEvent) {
+      this.startSearching = true
       const target = evt.currentTarget as HTMLInputElement
       this.updateKeyword(target.value)
       this.updateProduct(null)
     },
 
     selectProduct (evt: KeyboardEvent) {
+      this.startSearching = false
       const target = evt.currentTarget as HTMLInputElement
       const id = parseInt(target.dataset.id, 10)
       const product = this.productWithId(id)
@@ -75,16 +88,18 @@ export default Vue.extend({
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/styles.scss';
 .search-page {
   padding: 30px;
 }
+
 .search {
   display: grid;
   grid-template-columns: 1fr max-content;
   grid-column-gap: 10px;
 }
+
 .input {
   @extend %input;
   width: 100%;
@@ -98,8 +113,20 @@ export default Vue.extend({
   text-transform: uppercase;
   font-size: 14px;
 }
+
+.product-item:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
 .product-item {
   height: 40px;
   line-height: 40px;
+  cursor: pointer;
+  padding: 0 5px;
+  border-radius: 3px;
+}
+
+.product-item:hover {
+  background: #f7f7f7;
 }
 </style>
