@@ -33,7 +33,7 @@
       </div>
     </div>
     <div v-else>
-      No results found.
+      No results found 😔.
       <router-link :to="suggestUrl">Suggest.</router-link>
     </div>
   </div>

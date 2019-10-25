@@ -1,9 +1,6 @@
 <template>
   <div class="home-page">
     <div>
-      <router-link to="/logout">Logout</router-link>
-      <router-link to="/about">About</router-link>
-
       <div>
         How much does
         <router-link to="/search">
@@ -15,11 +12,11 @@
             disabled="true"
           />
         </router-link>
-        cost?
+        cost? 🤔
       </div>
     </div>
 
-    <div>
+    <div v-if="productPrices.length">
       <h1>
         Results
       </h1>
