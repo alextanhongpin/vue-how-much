@@ -63,7 +63,8 @@ export default new Router({
     },
     {
       path: PROFILE,
-      component: () => import('./views/Profile.vue')
+      component: () => import('./views/Profile.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '*',

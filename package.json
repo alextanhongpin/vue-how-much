@@ -10,6 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "cities.json": "^1.1.5",
     "core-js": "^2.6.5",
     "normalize.css": "^8.0.1",

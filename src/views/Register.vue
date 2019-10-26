@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <form v-on:submit.prevent class="login-form">
-      <h1>Login</h1>
+      <h1>Register</h1>
       <div>
         <p>
           <label for="email" class="label">Email</label>
@@ -59,10 +59,7 @@ export default Vue.extend({
   methods: {
     ...mapActions(['postLogin']),
     async submit () {
-      await this.postLogin({
-        email: this.email,
-        password: this.password
-      })
+      await this.postLogin(this.email, this.password)
       const redirect = this.$route.query.redirect || '/'
       this.$router.push(redirect)
     }

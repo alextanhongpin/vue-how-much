@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <main class="main">
-      <app-header @click="goToProfile" @settings="toggleModal"></app-header>
+      <app-header
+        @click="goToProfile"
+        @settings="toggleModal"
+        v-if="authorized"
+      ></app-header>
       <router-view />
     </main>
     <app-modal v-if="showModal">
@@ -15,6 +19,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import AppHeader from '@/components/AppHeader'
 import AppModal from '@/components/AppModal'
 import MenuItem from '@/components/MenuItem'
@@ -30,6 +35,10 @@ export default Vue.extend({
     return {
       showModal: false
     }
+  },
+
+  computed: {
+    ...mapGetters(['authorized'])
   },
 
   methods: {

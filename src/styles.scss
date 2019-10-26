@@ -19,6 +19,8 @@
 %button {
   appearance: none;
   height: 40px;
-  background: #ddd;
+  background: var(--cornflower-blue);
+  border: 1px solid #66aaff;
+  color: white;
   border-radius: 3px;
 }

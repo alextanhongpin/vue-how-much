@@ -2,14 +2,20 @@ import Vue from 'vue'
 import Vuex, { StoreOptions } from 'vuex'
 import product from '@/modules/product'
 import RootState from '@/types/root-state'
+import Credential from '@/types/credential'
+
 import router from './router'
+import {
+  getAccessToken,
+  setAccessToken,
+  removeAccessToken
+} from '@/models/auth'
+import { postLogin, postRegister } from '@/apis/auth'
 
 Vue.use(Vuex)
 
 const delay = async (duration = 1000) =>
   new Promise(resolve => window.setTimeout(resolve, duration))
-
-const KEY_NAME = 'access_token'
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -72,34 +78,37 @@ const store: StoreOptions<RootState> = {
 
   actions: {
     async fetchAccessToken ({ commit }) {
-      const accessToken = window.localStorage.getItem(KEY_NAME)
+      const accessToken = getAccessToken()
       commit('SET_ACCESS_TOKEN', accessToken)
     },
 
-    async postLogin ({ commit, dispatch }, email: string, password: string) {
+    async postLogin ({ commit, dispatch }, { email, password }: Credential) {
       try {
         commit('SET_LOADING', true)
-        await delay(250)
+        const { status, data } = await postLogin(email, password)
+        const { access_token: accessToken } = data
 
-        // TODO: Remove hardcoded implementation.
-        if (email !== 'john.doe@mail.com') throw new Error('bad error')
-        dispatch('login', 'xyz')
+        dispatch('login', accessToken)
         commit('SET_ERROR', '')
       } catch (error) {
+        const isAxiosError = error && error.response && error.response.data
+        const message = isAxiosError
+          ? error.response.data.message
+          : error.message
         dispatch('logout')
-        commit('SET_ERROR', error.message)
+        commit('SET_ERROR', message)
       } finally {
         commit('SET_LOADING', false)
       }
     },
 
     login ({ commit }, accessToken: string) {
-      window.localStorage.setItem(KEY_NAME, accessToken)
+      setAccessToken(accessToken)
       commit('SET_ACCESS_TOKEN', accessToken)
     },
 
     logout ({ commit }) {
-      window.localStorage.removeItem(KEY_NAME)
+      removeAccessToken()
       commit('SET_ACCESS_TOKEN', '')
     },
 
