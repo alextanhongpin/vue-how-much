@@ -1,5 +1,6 @@
 <template>
   <div class="search-page">
+    <h1>Search</h1>
     <div class="search">
       <input
         type="text"
@@ -8,6 +9,7 @@
         autocomplete
         :value="keyword"
         @input="inputKeyword"
+        autofocus
       />
 
       <button class="button" v-if="hasKeyword" @click="clear">
@@ -91,7 +93,6 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/styles.scss';
 .search-page {
-  padding: 30px;
 }
 
 .search {
@@ -119,10 +120,10 @@ export default Vue.extend({
 }
 
 .product-item {
-  height: 40px;
-  line-height: 40px;
+  height: 60px;
+  line-height: 60px;
   cursor: pointer;
-  padding: 0 5px;
+  padding: 0 10px;
   border-radius: 3px;
 }
 

@@ -1,23 +1,15 @@
 <template>
   <div id="app">
     <main class="main">
-      <app-header @click="toggleModal"></app-header>
+      <app-header @click="goToProfile" @settings="toggleModal"></app-header>
       <router-view />
     </main>
     <app-modal v-if="showModal">
-      <div class="menu-item" data-name="logout" @click="selectMenuItem">
-        Logout
-      </div>
-      <div class="menu-item" data-name="about" @click="selectMenuItem">
-        About
-      </div>
-      <div
-        class="menu-item is-close"
-        data-name="dismiss"
-        @click="selectMenuItem"
+      <menu-item data-name="logout" @click="selectMenuItem">Logout</menu-item>
+      <menu-item data-name="about" @click="selectMenuItem">About</menu-item>
+      <menu-item :close="true" data-name="dismiss" @click="selectMenuItem"
+        >Close</menu-item
       >
-        Close
-      </div>
     </app-modal>
   </div>
 </template>
@@ -25,11 +17,13 @@
 import Vue from 'vue'
 import AppHeader from '@/components/AppHeader'
 import AppModal from '@/components/AppModal'
+import MenuItem from '@/components/MenuItem'
 
 export default Vue.extend({
   components: {
     AppHeader,
-    AppModal
+    AppModal,
+    MenuItem
   },
 
   data () {
@@ -55,6 +49,10 @@ export default Vue.extend({
           console.log('not supported', target.name)
       }
       this.toggleModal()
+    },
+
+    goToProfile () {
+      this.$router.push('/profile')
     }
   }
 })
@@ -98,21 +96,5 @@ textarea {
 *:before,
 *:after {
   box-sizing: border-box;
-}
-
-.menu-item {
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  cursor: pointer;
-}
-.menu-item:not(:last-child) {
-  border-bottom: 1px solid #ddd;
-}
-.menu-item:hover {
-  background: #eee;
-}
-.is-close {
-  color: #ff4444;
 }
 </style>

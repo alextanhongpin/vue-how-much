@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import {
   ABOUT,
   INDEX,
+  PROFILE,
   SEARCH,
   SUGGEST,
   THANK_YOU,
@@ -59,6 +60,10 @@ export default new Router({
       path: THANK_YOU,
       component: () => import('./views/ThankYou.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: PROFILE,
+      component: () => import('./views/Profile.vue')
     },
     {
       path: '*',

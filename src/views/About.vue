@@ -1,7 +1,7 @@
 <template>
   <div class="about">
-    <router-link to="/">Home</router-link>
     <h1>About</h1>
+
     <p>How much wants to be the app for you to find the price of an item.</p>
     <p>Version {{ version }}</p>
   </div>

@@ -14,7 +14,7 @@
           id="product"
           class="input"
           type="text"
-          v-model="product"
+          :value="product"
           name="product"
           @input="inputProduct"
           maxlength="255"
@@ -34,8 +34,9 @@
           class="input"
           type="number"
           placeholder="Enter your amount"
-          v-model="amount"
+          :value="amount"
           name="amount"
+          @input="inputAmount"
           @change="parseInputAmount"
           min="0.01"
           max="10000000000000000"
@@ -77,6 +78,16 @@ export default Vue.extend({
   methods: {
     ...mapActions('product', ['updateKeyword', 'updateProduct']),
 
+    inputProduct (evt: KeyboardEvent) {
+      const target = evt.currentTarget as HTMLInputElement
+      this.product = target.value
+    },
+
+    inputAmount (evt: KeyboardEvent) {
+      const target = evt.currentTarget as HTMLInputElement
+      this.amount = target.value
+    },
+
     parseInputAmount (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
       this.amount = target.value
@@ -86,7 +97,6 @@ export default Vue.extend({
       // const amount = parseFloat(this.amount)
       // TODO: Reset keyword and product.
       // TODO: Create product.
-      console.log(this.amount, this.product)
       this.updateKeyword('')
       this.updateProduct(null)
       this.$router.replace('/thank-you')

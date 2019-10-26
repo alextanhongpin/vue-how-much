@@ -7,7 +7,7 @@
         <div class="username">John Doe</div>
         <div class="profile"></div>
       </div>
-      <div @click='$emit("settings", $event)'>
+      <div @click="$emit('settings', $event)">
         <i class="material-icons settings-icon">settings</i>
       </div>
     </div>

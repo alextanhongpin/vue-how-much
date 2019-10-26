@@ -1,16 +1,11 @@
 <template>
   <div class="home-page">
+    <h1>Home</h1>
     <div>
       <div>
         How much does
         <router-link to="/search">
-          <input
-            type="search"
-            placeholder="a bowl of maggi"
-            :value="keyword"
-            readonly
-            disabled="true"
-          />
+          <span class="input">{{ keywordOrDefault }}</span>
         </router-link>
         cost? 🤔
       </div>
@@ -37,13 +32,16 @@ import Vue from 'vue'
 import PriceList from '@/components/PriceList'
 import { mapGetters, mapActions } from 'vuex'
 
+const KEYWORDS = ['a bowl of maggi', 'wedding']
 export default Vue.extend({
   components: {
     PriceList
   },
+
   mounted () {
     this.getGeolocation()
   },
+
   methods: {
     ...mapActions('product', ['getGeolocation', 'updateCity', 'updateProduct']),
 
@@ -61,7 +59,13 @@ export default Vue.extend({
       'product',
       'keyword',
       'productPrices'
-    ])
+    ]),
+
+    keywordOrDefault (): string {
+      return (
+        this.keyword || KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)]
+      )
+    }
   }
 })
 </script>
@@ -69,11 +73,14 @@ export default Vue.extend({
 @import '@/styles.scss';
 .home-page {
   height: 100%;
-  padding: 30px;
 }
 
-input {
+.input {
   @extend %input;
+  display: inline-block;
+  line-height: 40px;
+  text-decoration: none;
+  color: var(--cornflower-blue);
 }
 
 .button {

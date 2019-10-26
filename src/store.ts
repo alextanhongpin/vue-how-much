@@ -16,24 +16,39 @@ const store: StoreOptions<RootState> = {
     version: process.env.VUE_APP_VERSION || '0.0.1',
     accessToken: '',
     error: '',
-    loading: false
+    loading: false,
+    username: '',
+    currency: '',
+    email: ''
   },
 
   getters: {
-    version (state: RootState) {
+    version (state: RootState): string {
       return state.version
     },
 
-    authorized (state: RootState) {
+    authorized (state: RootState): boolean {
       return !!state.accessToken
     },
 
-    error (state: RootState) {
+    error (state: RootState): string {
       return state.error
     },
 
-    loading (state: RootState) {
+    loading (state: RootState): boolean {
       return state.loading
+    },
+
+    username (state: RootState): string {
+      return state.username
+    },
+
+    currency (state: RootState): string {
+      return state.currency
+    },
+
+    email (state: RootState): string {
+      return state.email
     }
   },
 
@@ -48,6 +63,10 @@ const store: StoreOptions<RootState> = {
 
     SET_LOADING (state: RootState, loading: boolean) {
       state.loading = loading
+    },
+
+    SET_CURRENCY (state: RootState, currency: string) {
+      state.currency = currency
     }
   },
 
@@ -82,6 +101,10 @@ const store: StoreOptions<RootState> = {
     logout ({ commit }) {
       window.localStorage.removeItem(KEY_NAME)
       commit('SET_ACCESS_TOKEN', '')
+    },
+
+    updateCurrency ({ commit }, currency: string) {
+      commit('SET_CURRENCY', currency)
     }
   },
 

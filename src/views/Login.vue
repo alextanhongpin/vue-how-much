@@ -1,6 +1,6 @@
 <template>
   <div class="login-page">
-    <form v-on:submit.prevent>
+    <form v-on:submit.prevent class="login-form">
       <h1>Login</h1>
       <div>
         <p>
@@ -13,6 +13,7 @@
           name="email"
           v-model="email"
           required
+          autofocus
         />
       </div>
       <br />
@@ -67,8 +68,13 @@ export default Vue.extend({
 </script>
 <style lang="scss" scoped>
 @import '@/styles.scss';
+$max-width: 280px;
 .login-page {
-  padding: 30px;
+}
+
+.login-form {
+  margin: auto;
+  max-width: $max-width;
 }
 
 .label {
@@ -79,13 +85,13 @@ export default Vue.extend({
 
 .input {
   @extend %input;
-  max-width: 240px;
+  max-width: $max-width;
   width: 100%;
 }
 
 .button {
   @extend %button;
   width: 100%;
-  max-width: 240px;
+  max-width: $max-width;
 }
 </style>
