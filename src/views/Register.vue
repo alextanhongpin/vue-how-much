@@ -1,55 +1,23 @@
 <template>
-  <div class="login-page">
-    <form v-on:submit.prevent class="login-form">
-      <h1>Register</h1>
-      <div>
-        <p>
-          <label for="email" class="label">Email</label>
+  <div class="register-page">
+    <h1>Register</h1>
+    <auth-form @submit="submit" :error="error" :loading="loading">
+      <template v-slot:footer>
+        <p class="footer">
+          Don't have an account?
+          <router-link to="/register">Register an account.</router-link>
         </p>
-        <input
-          class="input"
-          id="email"
-          type="email"
-          name="email"
-          v-model="email"
-          required
-          autofocus
-        />
-      </div>
-      <br />
-
-      <div>
-        <p>
-          <label for="password" class="label">Password</label>
-        </p>
-        <input
-          id="password"
-          class="input"
-          type="password"
-          name="password"
-          v-model="password"
-          autocomplete
-          required
-        />
-      </div>
-      <br />
-
-      <button class="button" @click="submit" :disabled="loading">
-        Continue
-      </button>
-      {{ error }}
-    </form>
+      </template>
+    </auth-form>
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
+import AuthForm from '@/components/AuthForm'
 export default Vue.extend({
-  data () {
-    return {
-      email: '',
-      password: ''
-    }
+  components: {
+    AuthForm
   },
 
   computed: {
@@ -57,9 +25,12 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions(['postLogin']),
-    async submit () {
-      await this.postLogin(this.email, this.password)
+    ...mapActions(['postRegister']),
+    async submit ({ email, password }) {
+      await this.postRegister({
+        email,
+        password
+      })
       const redirect = this.$route.query.redirect || '/'
       this.$router.push(redirect)
     }
@@ -69,29 +40,17 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/styles.scss';
 $max-width: 280px;
-.login-page {
-}
-
-.login-form {
-  margin: auto;
-  max-width: $max-width;
-}
-
-.label {
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.input {
-  @extend %input;
-  max-width: $max-width;
-  width: 100%;
+.register-page {
 }
 
 .button {
   @extend %button;
   width: 100%;
   max-width: $max-width;
+}
+
+.footer {
+  font-size: 14px;
+  min-height: 40px;
 }
 </style>
