@@ -16,7 +16,6 @@
           type="text"
           v-model="product"
           name="product"
-          @input="inputProduct"
           maxlength="255"
           minlength="3"
           autocomplete

@@ -4,8 +4,8 @@
     <auth-form @submit="submit" :error="error" :loading="loading">
       <template v-slot:footer>
         <p class="footer">
-          Don't have an account?
-          <router-link to="/register">Register an account.</router-link>
+          Already have an account?
+          <router-link to="/login">Login here.</router-link>
         </p>
       </template>
     </auth-form>

@@ -1,7 +1,20 @@
 import request, { REQUIRE_AUTH } from '@/apis/base'
+import {
+  PostRegisterRequest,
+  PostRegisterResponse,
+  PostLoginRequest,
+  PostLoginResponse
+} from '@/apis/types/auth'
+import { ApiErrorResponse, ApiResponse } from '@/apis/types/api'
 
-export function postLogin (email: string, password: string) {
-  return request({
+export function postLogin ({
+  email,
+  password
+}: PostLoginRequest): Promise<
+  ApiResponse<PostLoginResponse>,
+  ApiErrorResponse
+> {
+  return request<PostLoginResponse>({
     url: '/login',
     method: 'post',
     data: {
@@ -11,8 +24,14 @@ export function postLogin (email: string, password: string) {
   })
 }
 
-export function postRegister (email: string, password: string) {
-  return request({
+export function postRegister ({
+  email,
+  password
+}: PostRegisterRequest): Promise<
+  ApiResponse<PostRegisterResponse>,
+  ApiErrorResponse
+> {
+  return request<PostRegisterResponse>({
     url: '/register',
     method: 'post',
     data: {
@@ -22,7 +41,9 @@ export function postRegister (email: string, password: string) {
   })
 }
 
-export function postMe () {
+export function postMe ({
+
+}: PostMeRequest): Promise<ApiResponse<PostMeResponse>, ApiErrorResponse> {
   return request(
     {
       url: '/me',

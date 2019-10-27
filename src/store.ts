@@ -11,11 +11,35 @@ import {
   removeAccessToken
 } from '@/models/auth'
 import { postLogin, postRegister, postMe, patchCurrency } from '@/apis/auth'
+import { ApiResponse } from '@/apis/types/api'
+import {
+  PostRegisterRequest,
+  PostRegisterResponse,
+  PostLoginRequest,
+  PostLoginResponse,
+  PostMeRequest,
+  PostMeResponse
+} from '@/apis/types/auth'
 
 Vue.use(Vuex)
 
 const delay = async (duration = 1000) =>
   new Promise(resolve => window.setTimeout(resolve, duration))
+
+async function wrapFetch ({ commit, dispatch }, fn) {
+  try {
+    commit('SET_ERROR', '')
+    commit('SET_LOADING', true)
+    const res = await fn()
+    return res
+  } catch (error) {
+    const { data, status }: ApiErrorResponse = error.response
+    commit('SET_ERROR', data.message)
+    if (status === 401) return dispatch('logout')
+  } finally {
+    commit('SET_LOADING', false)
+  }
+}
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -89,58 +113,27 @@ const store: StoreOptions<RootState> = {
     },
 
     async postLogin ({ commit, dispatch }, { email, password }: Credential) {
-      try {
-        commit('SET_ERROR', '')
-        commit('SET_LOADING', true)
-        const { status, data } = await postLogin(email, password)
-        const { access_token: accessToken } = data
-
-        dispatch('login', accessToken)
-      } catch (error) {
-        const { message } = error.response.data
-        dispatch('logout')
-        commit('SET_ERROR', message)
-      } finally {
-        commit('SET_LOADING', false)
-      }
+      return wrapFetch({ commit, dispatch }, async () => {
+        const req: PostLoginRequest = { email, password }
+        const res: PostLoginResponse = (await postLogin(req)).data || {}
+        dispatch('login', res.access_token)
+      })
     },
 
     async postRegister ({ commit, dispatch }, { email, password }: Credential) {
-      try {
-        commit('SET_ERROR', '')
-        commit('SET_LOADING', true)
-        const { status, data } = await postRegister(email, password)
-        const { access_token: accessToken } = data
-
-        dispatch('login', accessToken)
-      } catch (error) {
-        const isAxiosError = error && error.response && error.response.data
-        console.error('loginError:', error)
-        const message = isAxiosError
-          ? error.response.data.message
-          : error.message
-        dispatch('logout')
-        commit('SET_ERROR', message)
-      } finally {
-        commit('SET_LOADING', false)
-      }
+      return wrapFetch({ commit, dispatch }, async () => {
+        const req: PostRegisterRequest = { email, password }
+        const res: PostRegisterResponse = (await postRegister(req)).data || {}
+        dispatch('login', res.access_token)
+      })
     },
 
     async postMe ({ commit, dispatch }) {
-      try {
-        commit('SET_LOADING', true)
-        const { status, data } = await postMe()
-        const { name, email, currency } = data
-        commit('SET_USER_INFO', { name, email, currency })
-      } catch (error) {
-        const { data, status } = error.response
-        commit('SET_ERROR', data.message)
-        if (status === 401) {
-          return dispatch('logout')
-        }
-      } finally {
-        commit('SET_LOADING', false)
-      }
+      return wrapFetch({ commit, dispatch }, async () => {
+        const req: PostMeRequest = {}
+        const res: PostMeResponse = (await postMe(req)).data || {}
+        commit('SET_USER_INFO', res)
+      })
     },
 
     login ({ commit }, accessToken: string) {

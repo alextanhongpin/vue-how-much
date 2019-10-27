@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ApiResponse, ApiErrorResponse } from '@/apis/types/error'
 import { getAccessToken, removeAccessToken } from '@/models/auth'
 
 const client = axios.create({
@@ -19,7 +20,10 @@ function withAuthHeader (headers = {}) {
 
 export const REQUIRE_AUTH = true
 
-export default async function request (params, withAuth = false) {
+export default async function request<T> (
+  params,
+  withAuth = false
+): Promise<ApiResponse<T>, ApiErrorResponse> {
   const { headers = client.defaults.headers, ...rest } = params
   return client.request({
     // url: '/',
