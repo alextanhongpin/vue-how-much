@@ -54,6 +54,14 @@ const getters: GetterTree<ProductState, RootState> = {
     return state.productPrices.filter(({ productId }: ProductPrice) => {
       return productId === id
     })
+  },
+
+  loading (state: ProductState) {
+    return state.loading
+  },
+
+  error (state: ProductState) {
+    return state.error
   }
 }
 export default getters

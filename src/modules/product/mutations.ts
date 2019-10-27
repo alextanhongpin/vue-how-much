@@ -23,6 +23,14 @@ const mutations: MutationTree<ProductState> = {
   SET_THROTTLE (state: ProductState, throttle: number) {
     state.throttle && window.clearTimeout(state.throttle)
     state.throttle = throttle
+  },
+
+  SET_LOADING (state: ProductState, loading: boolean)  {
+    state.loading = loading
+  },
+
+  SET_ERROR (state:ProductState, error: string) {
+    state.error = error
   }
 }
 export default mutations

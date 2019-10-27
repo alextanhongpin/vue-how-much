@@ -4,6 +4,19 @@ import { ActionTree } from 'vuex'
 import RootState from '@/types/root-state'
 import ProductState from '@/types/product-state'
 import Product from '@/types/product'
+import { wrapFetch } from '@/modules'
+
+// Api calls.
+import { search, createProduct } from '@/apis/product'
+import { ApiResponse } from '@/apis/types/api'
+
+// Request/response types pair for each api call.
+import {
+  SearchRequest,
+  SearchResponse,
+  CreateProductRequest,
+  CreateProductResponse
+} from '@/apis/types/product'
 
 // Models.
 import { getClosestCity } from '@/models/cities'
@@ -28,18 +41,39 @@ const actions: ActionTree<ProductState, RootState> = {
     commit('SET_CITY', city)
   },
 
-  updateKeyword ({ commit }, keyword: string) {
-    commit('SET_KEYWORD', keyword)
+  updateKeyword ({ commit, dispatch }, q: string) {
+    commit('SET_KEYWORD', q)
     commit(
       'SET_THROTTLE',
       window.setTimeout(() => {
-        console.log(keyword, 'debounced')
+        wrapFetch({ commit, dispatch }, async () => {
+          const req: SearchRequest = { q }
+          const res: SearchResponse = (await search({ q })).data || []
+          console.log('searchResponse', res)
+        })
+        console.log(q, 'debounced')
       }, 250)
     )
   },
 
   updateProduct ({ commit }, product: Product) {
     commit('SET_PRODUCT', product)
+  },
+
+  createProduct ({ commit, dispatch, getters, rootGetters }, product: Product) {
+    return wrapFetch({ commit, dispatch }, async () => {
+      if (!rootGetters.currency) {
+        await dispatch('postMe', null, { root: true })
+      }
+      const req: CreateProductRequest = {
+        name: product.name,
+        price: product.price,
+        currency: rootGetters.currency
+      }
+      console.log('createproduct', req)
+      const res: CreateProductResponse = (await createProduct(req)).data || {}
+      return res.success
+    })
   }
 }
 

@@ -10,4 +10,6 @@ export default interface ProductState {
   products: Product[]
   product?: Product
   productPrices: ProductPrice[]
+  loading: boolean
+  error: string
 }

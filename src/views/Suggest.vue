@@ -8,14 +8,14 @@
     <form v-on:submit.prevent>
       <div>
         <p>
-          <label for="product" class="label">Name</label>
+          <label for="name" class="label">Name</label>
         </p>
         <input
-          id="product"
+          id="name"
           class="input"
           type="text"
-          v-model="product"
-          name="product"
+          v-model="name"
+          name="name"
           maxlength="255"
           minlength="3"
           autocomplete
@@ -26,17 +26,18 @@
 
       <div>
         <p>
-          <label for="amount" class="label">Amount</label>
+          <label for="price" class="label">Price</label>
         </p>
         <input
-          id="amount"
+          id="price"
           class="input"
           type="number"
-          placeholder="Enter your amount"
-          v-model="amount"
-          name="amount"
-          @change="parseInputAmount"
+          placeholder="Enter your price"
+          v-model="price"
+          name="price"
+          @change="parseInputPrice"
           min="0.01"
+          step="0.01"
           max="10000000000000000"
           autocomplete
           required
@@ -44,7 +45,7 @@
       </div>
       <br />
 
-      <button @click="submitForm" class="button">
+      <button @click="submitForm" class="button" :disabled="loading">
         Submit
       </button>
     </form>
@@ -55,7 +56,7 @@ import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 export default Vue.extend({
   computed: {
-    ...mapGetters('product', ['keyword']),
+    ...mapGetters('product', ['keyword', 'loading']),
 
     backUrl () {
       return this.$route.query.redirect || '/'
@@ -63,31 +64,33 @@ export default Vue.extend({
   },
 
   mounted () {
-    this.product = this.keyword
+    this.name = this.keyword
   },
 
   data () {
     return {
-      amount: '',
-      product: ''
+      price: '',
+      name: ''
     }
   },
 
   methods: {
-    ...mapActions('product', ['updateKeyword', 'updateProduct']),
+    ...mapActions('product', ['updateKeyword', 'createProduct']),
 
-    parseInputAmount (evt: KeyboardEvent) {
+    parseInputPrice (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
-      this.amount = target.value
+      this.price = target.value
     },
 
-    submitForm () {
-      // const amount = parseFloat(this.amount)
+    async submitForm () {
+      // const price = parseFloat(this.price)
       // TODO: Reset keyword and product.
       // TODO: Create product.
-      console.log(this.amount, this.product)
       this.updateKeyword('')
-      this.updateProduct(null)
+      await this.createProduct({
+        price: parseFloat(this.price),
+        name: this.name
+      })
       this.$router.replace('/thank-you')
     }
   }
