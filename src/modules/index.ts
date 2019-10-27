@@ -12,9 +12,14 @@ export async function wrapFetch (
     return res
   } catch (error) {
     onError && onError(error)
-    const { data, status }: ApiErrorResponse = error.response
-    commit('SET_ERROR', data.message)
-    if (status === 401) return dispatch('logout', null, { root: true })
+    if (error && error.response && error.response.data) {
+      const { data, status }: ApiErrorResponse = error.response
+      const message = (data && data.message) || error.message
+      commit('SET_ERROR', message)
+      if (status === 401) return dispatch('logout', null, { root: true })
+    } else {
+      commit('SET_ERROR', error.message)
+    }
   } finally {
     commit('SET_LOADING', false)
   }
