@@ -8,7 +8,7 @@ import { wrapFetch } from '@/modules'
 
 // Api calls.
 import { search, createProduct, getProductPriceAndVotes } from '@/apis/product'
-import { postVote } from '@/apis/vote'
+import { postVote, getVotes } from '@/apis/vote'
 import { ApiResponse } from '@/apis/types/api'
 
 // Request/response types pair for each api call.
@@ -20,7 +20,12 @@ import {
   GetProductPriceAndVotesRequest,
   GetProductPriceAndVotesResponse
 } from '@/apis/types/product'
-import { VoteRequest, VoteResponse } from '@/apis/types/vote'
+import {
+  VoteRequest,
+  VoteResponse,
+  GetVotesRequest,
+  GetVotesResponse
+} from '@/apis/types/vote'
 
 const actions: ActionTree<ProductState, RootState> = {
   updateKeyword ({ commit, dispatch }, q: string) {
@@ -42,9 +47,10 @@ const actions: ActionTree<ProductState, RootState> = {
     )
   },
 
-  updateProduct ({ commit, dispatch }, product: Product) {
+  async updateProduct ({ commit, dispatch }, product: Product) {
     commit('SET_PRODUCT', product)
-    return dispatch('getProductPriceAndVotes')
+    await dispatch('getProductPriceAndVotes')
+    await dispatch('getVotes')
   },
 
   getProductPriceAndVotes ({ commit, dispatch, getters, rootGetters }) {
@@ -85,11 +91,20 @@ const actions: ActionTree<ProductState, RootState> = {
     })
   },
 
-  postVote ({ commit, dispatch }, { vote, productPriceId }) {
-    return wrapFetch({ commit, dispatch }, async () => {
+  async postVote ({ commit, dispatch }, { vote, productPriceId }) {
+    await wrapFetch({ commit, dispatch }, async () => {
       const req: VoteRequest = { vote, productPriceId }
       const res: VoteResponse = (await postVote(req)).data || {}
       return res.success
+    })
+    dispatch('getVotes')
+  },
+
+  getVotes ({ commit, dispatch }) {
+    return wrapFetch({ commit, dispatch }, async () => {
+      const req: GetVotesRequest = {}
+      const res: GetVotesResponse = (await getVotes(req)).data || {}
+      commit('SET_VOTES', res.data || [])
     })
   }
 }

@@ -4,6 +4,7 @@ import RootState from '@/types/root-state'
 import ProductState from '@/types/product-state'
 import Product from '@/types/product'
 import ProductPrice from '@/types/product-price'
+import Vote from '@/types/vote'
 
 import actions from '@/modules/product/actions'
 import mutations from '@/modules/product/mutations'
@@ -16,7 +17,8 @@ export const state: ProductState = {
   product: {} as Product,
   throttle: -1,
   products: [] as Product[],
-  productPrices: [] as ProductPrice[]
+  productPrices: [] as ProductPrice[],
+  votes: [] as Vote[]
 }
 
 const product: Module<ProductState, RootState> = {

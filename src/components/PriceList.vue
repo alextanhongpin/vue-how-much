@@ -43,31 +43,18 @@ export default Vue.extend({
 
   methods: {
     upvote () {
-      const value = this.hasUpvote ? -1 : 1
-      this.hasUpvote = !this.hasUpvote
-      this.upvotes += value
-      if (this.hasDownvote) {
-        this.hasDownvote = !this.hasDownvote
-        this.downvotes -= 1
-      }
-
+      const vote = this.hasUpvote ? 0 : 1
       this.$emit('vote', {
         productPriceId: this.product_price_id,
-        vote: this.hasUpvote ? value : 0
+        vote
       })
     },
 
     downvote () {
-      const value = this.hasDownvote ? -1 : 1
-      this.hasDownvote = !this.hasDownvote
-      this.downvotes += value
-      if (this.hasUpvote) {
-        this.hasUpvote = !this.hasUpvote
-        this.upvotes -= 1
-      }
+      const vote = this.hasDownvote ? 0 : -1
       this.$emit('vote', {
         productPriceId: this.product_price_id,
-        vote: this.hasDownvote ? value : 0
+        vote
       })
     }
   }

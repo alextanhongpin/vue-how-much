@@ -17,3 +17,12 @@ export function postVote ({
     }
   })
 }
+
+export function getVotes (
+  _req: GetVotesRequest
+): Promise<ApiResponse<GetVotesResponse>, ApiErrorResponse> {
+  return requestPrivate<GetVotesResponse>({
+    url: `/v1/votes`,
+    method: 'get'
+  })
+}

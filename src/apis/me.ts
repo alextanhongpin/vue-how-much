@@ -10,7 +10,6 @@ import {
 export function postMe (
   _req: PostMeRequest
 ): Promise<ApiResponse<PostMeResponse>, ApiErrorResponse> {
-  console.log('posting me')
   return requestPrivate<PostMeResponse>({
     url: '/me',
     method: 'post'

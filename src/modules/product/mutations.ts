@@ -3,6 +3,7 @@ import ProductState from '@/types/product-state'
 import Product from '@/types/product'
 import ProductPrice from '@/types/product-price'
 import Position from '@/types/position'
+import Vote from '@/types/vote'
 
 const mutations: MutationTree<ProductState> = {
   SET_POSITION (state: ProductState, position: Position) {
@@ -40,6 +41,10 @@ const mutations: MutationTree<ProductState> = {
 
   SET_PRODUCT_PRICES (state: ProductState, productPrices: ProductPrice[]) {
     state.productPrices = productPrices
+  },
+
+  SET_VOTES (state: ProductState, votes: Vote[]) {
+    state.votes = votes
   }
 }
 export default mutations

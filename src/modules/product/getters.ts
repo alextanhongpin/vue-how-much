@@ -32,8 +32,19 @@ const getters: GetterTree<ProductState, RootState> = {
     }
   },
 
-  productPrices (state: ProductState): ProductPrice[] {
-    return state.productPrices
+  productPrices (state: ProductState, getters): ProductPrice[] {
+    return state.productPrices.map(item => {
+      const votes = getters.votes || {}
+      const hasUpvote = votes[item.product_price_id] === 1
+      const hasDownvote = votes[item.product_price_id] === -1
+      return {
+        ...item,
+        hasUpvote,
+        hasDownvote,
+        upvotes: hasUpvote ? item.upvotes + 1 : item.upvotes,
+        downvotes: hasDownvote ? item.downvotes + 1 : item.downvotes
+      }
+    })
   },
 
   loading (state: ProductState) {
@@ -42,6 +53,13 @@ const getters: GetterTree<ProductState, RootState> = {
 
   error (state: ProductState) {
     return state.error
+  },
+
+  votes (state: ProductState) {
+    return state.votes.reduce((acc, { product_price_id, vote }) => {
+      acc[product_price_id] = vote
+      return acc
+    }, {})
   }
 }
 export default getters
