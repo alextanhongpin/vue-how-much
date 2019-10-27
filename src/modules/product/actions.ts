@@ -7,7 +7,7 @@ import Product from '@/types/product'
 import { wrapFetch } from '@/modules'
 
 // Api calls.
-import { search, createProduct } from '@/apis/product'
+import { search, createProduct, getProductPriceAndVotes } from '@/apis/product'
 import { ApiResponse } from '@/apis/types/api'
 
 // Request/response types pair for each api call.
@@ -15,7 +15,9 @@ import {
   SearchRequest,
   SearchResponse,
   CreateProductRequest,
-  CreateProductResponse
+  CreateProductResponse,
+  GetProductPriceAndVotesRequest,
+  GetProductPriceAndVotesResponse
 } from '@/apis/types/product'
 
 // Models.
@@ -55,16 +57,38 @@ const actions: ActionTree<ProductState, RootState> = {
     )
   },
 
-  updateProduct ({ commit }, product: Product) {
+  updateProduct ({ commit, dispatch }, product: Product) {
     commit('SET_PRODUCT', product)
+    return dispatch('getProductPriceAndVotes')
+  },
+
+  getProductPriceAndVotes ({ commit, dispatch, getters, rootGetters }) {
+    if (!getters.productId) {
+      return
+    }
+    return wrapFetch({ commit, dispatch }, async () => {
+      await dispatch('fetchCurrency')
+      const req: GetProductPriceAndVotesRequest = {
+        productId: getters.productId,
+        currency: rootGetters.currency
+      }
+      const res: GetProductPriceAndVotesResponse =
+        (await getProductPriceAndVotes(req)).data || {}
+      commit('SET_PRODUCT_PRICES', res.data || [])
+    })
+  },
+
+  async fetchCurrency ({ rootGetters }) {
+    // Ensure that the currency is always set.
+    if (!rootGetters.currency) {
+      await dispatch('postMe', null, { root: true })
+    }
   },
 
   createProduct ({ commit, dispatch, getters, rootGetters }, product: Product) {
     return wrapFetch({ commit, dispatch }, async () => {
       // Ensure that the currency is always set.
-      if (!rootGetters.currency) {
-        await dispatch('postMe', null, { root: true })
-      }
+      await dispatch('fetchCurrency')
       const req: CreateProductRequest = {
         name: product.name,
         price: product.price,

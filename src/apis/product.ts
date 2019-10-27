@@ -7,7 +7,9 @@ import {
   SearchResponse,
   SearchResponse,
   CreateProductRequest,
-  CreateProductResponse
+  CreateProductResponse,
+  GetProductPriceAndVotesRequest,
+  GetProductPriceAndVotesResponse
 } from '@/apis/types/product'
 
 export function search ({
@@ -40,6 +42,23 @@ export function createProduct ({
         currency,
         price
       }
+    },
+    REQUIRE_AUTH
+  )
+}
+
+export function getProductPriceAndVotes ({
+  productId,
+  currency
+}: GetProductPriceAndVotesRequest): Promise<
+  ApiResponse<GetProductPriceAndVotesResponse>,
+  ApiErrorResponse
+> {
+  return request(
+    {
+      url: `/v1/products/${productId}`,
+      method: 'get',
+      params: { currency }
     },
     REQUIRE_AUTH
   )

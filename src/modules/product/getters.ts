@@ -30,6 +30,10 @@ const getters: GetterTree<ProductState, RootState> = {
     return state.product
   },
 
+  productId (state: ProductState): string {
+    return (state.product && state.product.id) || ''
+  },
+
   keyword (state: ProductState): string {
     return state.keyword
   },
@@ -45,11 +49,7 @@ const getters: GetterTree<ProductState, RootState> = {
   },
 
   productPrices (state: ProductState): ProductPrice[] {
-    if (!state.product) return []
-    const id = state.product.id
-    return state.productPrices.filter(({ productId }: ProductPrice) => {
-      return productId === id
-    })
+    return state.productPrices
   },
 
   loading (state: ProductState) {

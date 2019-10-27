@@ -6,7 +6,7 @@
     </div>
     <div class="action-bar">
       <div>
-        <b>{{ upvotes }}</b> upvotes | <b>{{ downvotes }}</b> downvotes
+        <b>{{ downvotes }}</b> downvotes | <b>{{ upvotes }}</b> upvotes
       </div>
       <div class="vote-icons">
         <i

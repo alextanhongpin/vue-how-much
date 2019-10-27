@@ -1,4 +1,5 @@
 import ProductInfo from '@/models/product-info'
+import ProductPrice from '@/models/product-price'
 
 export interface SearchRequest {
   q: string
@@ -16,4 +17,13 @@ export interface CreateProductRequest {
 
 export interface CreateProductResponse {
   success: boolean
+}
+
+export interface GetProductPriceAndVotesRequest {
+  currency: string
+  productId: string
+}
+
+export interface GetProductPriceAndVotesResponse {
+  data: ProductPrice[]
 }
