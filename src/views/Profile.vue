@@ -8,7 +8,7 @@
           <td>
             Name
           </td>
-          <td>{{ username }}</td>
+          <td>{{ name }}</td>
         </tr>
         <tr>
           <td>Email</td>
@@ -50,7 +50,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters(['currency', 'username', 'email'])
+    ...mapGetters(['currency', 'name', 'email'])
   },
 
   data () {
@@ -64,10 +64,11 @@ export default Vue.extend({
     if (!this.currency) {
       this.updateCurrency('MYR')
     }
+    this.postMe()
   },
 
   methods: {
-    ...mapActions(['updateCurrency']),
+    ...mapActions(['updateCurrency', 'postMe']),
 
     selectMenuItem (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLElement

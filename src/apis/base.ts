@@ -17,6 +17,8 @@ function withAuthHeader (headers = {}) {
   }
 }
 
+export const REQUIRE_AUTH = true
+
 export default async function request (params, withAuth = false) {
   const { headers = client.defaults.headers, ...rest } = params
   return client.request({

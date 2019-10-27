@@ -10,7 +10,7 @@ import {
   setAccessToken,
   removeAccessToken
 } from '@/models/auth'
-import { postLogin, postRegister } from '@/apis/auth'
+import { postLogin, postRegister, postMe, patchCurrency } from '@/apis/auth'
 
 Vue.use(Vuex)
 
@@ -23,7 +23,7 @@ const store: StoreOptions<RootState> = {
     accessToken: '',
     error: '',
     loading: false,
-    username: '',
+    name: '',
     currency: '',
     email: ''
   },
@@ -45,8 +45,8 @@ const store: StoreOptions<RootState> = {
       return state.loading
     },
 
-    username (state: RootState): string {
-      return state.username
+    name (state: RootState): string {
+      return state.name
     },
 
     currency (state: RootState): string {
@@ -73,6 +73,12 @@ const store: StoreOptions<RootState> = {
 
     SET_CURRENCY (state: RootState, currency: string) {
       state.currency = currency
+    },
+
+    SET_USER_INFO (state: RootState, { name, currency, email }) {
+      state.name = name
+      state.currency = currency
+      state.email = email
     }
   },
 
@@ -84,19 +90,54 @@ const store: StoreOptions<RootState> = {
 
     async postLogin ({ commit, dispatch }, { email, password }: Credential) {
       try {
+        commit('SET_ERROR', '')
         commit('SET_LOADING', true)
         const { status, data } = await postLogin(email, password)
         const { access_token: accessToken } = data
 
         dispatch('login', accessToken)
+      } catch (error) {
+        const { message } = error.response.data
+        dispatch('logout')
+        commit('SET_ERROR', message)
+      } finally {
+        commit('SET_LOADING', false)
+      }
+    },
+
+    async postRegister ({ commit, dispatch }, { email, password }: Credential) {
+      try {
         commit('SET_ERROR', '')
+        commit('SET_LOADING', true)
+        const { status, data } = await postRegister(email, password)
+        const { access_token: accessToken } = data
+
+        dispatch('login', accessToken)
       } catch (error) {
         const isAxiosError = error && error.response && error.response.data
+        console.error('loginError:', error)
         const message = isAxiosError
           ? error.response.data.message
           : error.message
         dispatch('logout')
         commit('SET_ERROR', message)
+      } finally {
+        commit('SET_LOADING', false)
+      }
+    },
+
+    async postMe ({ commit, dispatch }) {
+      try {
+        commit('SET_LOADING', true)
+        const { status, data } = await postMe()
+        const { name, email, currency } = data
+        commit('SET_USER_INFO', { name, email, currency })
+      } catch (error) {
+        const { data, status } = error.response
+        commit('SET_ERROR', data.message)
+        if (status === 401) {
+          return dispatch('logout')
+        }
       } finally {
         commit('SET_LOADING', false)
       }
@@ -112,8 +153,20 @@ const store: StoreOptions<RootState> = {
       commit('SET_ACCESS_TOKEN', '')
     },
 
-    updateCurrency ({ commit }, currency: string) {
+    async updateCurrency ({ commit }, currency: string) {
+      const prevCurrency = this.currency
       commit('SET_CURRENCY', currency)
+      const undo = () => commit('SET_CURRENCY', prevCurrency)
+      try {
+        const { data } = patchCurrency(currency)
+      } catch (error) {
+        undo()
+        const { data, status } = error.response
+        commit('SET_ERROR', data.message)
+        if (status === 401) {
+          return dispatch('logout')
+        }
+      }
     }
   },
 
