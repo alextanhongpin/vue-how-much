@@ -62,7 +62,11 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('product', ['updateKeyword', 'updateProduct']),
+    ...mapActions('product', [
+      'updateKeyword',
+      'updateProduct',
+      'searchKeyword'
+    ]),
 
     clear () {
       this.updateKeyword('')
@@ -71,7 +75,7 @@ export default Vue.extend({
 
     inputKeyword (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
-      this.updateKeyword(target.value)
+      this.searchKeyword(target.value)
       this.updateProduct(null)
     },
 

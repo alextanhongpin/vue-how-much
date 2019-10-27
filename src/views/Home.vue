@@ -20,6 +20,7 @@
         v-bind="product"
         v-for="product in productPrices"
         :key="product.id"
+        @vote="vote"
       ></price-list>
 
       <router-link to="/suggest">Suggest price.</router-link>
@@ -41,15 +42,24 @@ export default Vue.extend({
   },
 
   mounted () {
-    this.getGeolocation()
+    // this.getGeolocation()
   },
 
   methods: {
-    ...mapActions('product', ['getGeolocation', 'updateCity', 'updateProduct']),
+    ...mapActions('product', [
+      'getGeolocation',
+      'updateCity',
+      'updateProduct',
+      'postVote'
+    ]),
 
     inputCity (evt: KeyboardEvent) {
       const target = evt.currentTarget as HTMLInputElement
       this.updateCity(target.value)
+    },
+
+    vote ({ vote, productPriceId }) {
+      this.postVote({ productPriceId, vote })
     }
   },
 

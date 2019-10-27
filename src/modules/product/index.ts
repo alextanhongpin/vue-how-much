@@ -14,8 +14,6 @@ const namespaced: boolean = true
 export const state: ProductState = {
   keyword: '',
   product: {} as Product,
-  position: {} as Position,
-  city: '' as string,
   throttle: -1,
   products: [] as Product[],
   productPrices: [] as ProductPrice[]

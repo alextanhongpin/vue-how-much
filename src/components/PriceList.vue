@@ -31,6 +31,7 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    product_price_id: { type: String, default: '' },
     price: { type: Number, default: 0 },
     currency: { type: String, default: '' },
     upvotes: { type: Number, default: 0 },
@@ -49,6 +50,11 @@ export default Vue.extend({
         this.hasDownvote = !this.hasDownvote
         this.downvotes -= 1
       }
+
+      this.$emit('vote', {
+        productPriceId: this.product_price_id,
+        vote: this.hasUpvote ? value : 0
+      })
     },
 
     downvote () {
@@ -59,6 +65,10 @@ export default Vue.extend({
         this.hasUpvote = !this.hasUpvote
         this.upvotes -= 1
       }
+      this.$emit('vote', {
+        productPriceId: this.product_price_id,
+        vote: this.hasDownvote ? value : 0
+      })
     }
   }
 })

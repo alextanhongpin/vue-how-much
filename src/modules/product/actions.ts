@@ -8,6 +8,7 @@ import { wrapFetch } from '@/modules'
 
 // Api calls.
 import { search, createProduct, getProductPriceAndVotes } from '@/apis/product'
+import { postVote } from '@/apis/vote'
 import { ApiResponse } from '@/apis/types/api'
 
 // Request/response types pair for each api call.
@@ -19,39 +20,23 @@ import {
   GetProductPriceAndVotesRequest,
   GetProductPriceAndVotesResponse
 } from '@/apis/types/product'
-
-// Models.
-import { getClosestCity } from '@/models/cities'
+import { VoteRequest, VoteResponse } from '@/apis/types/vote'
 
 const actions: ActionTree<ProductState, RootState> = {
-  getGeolocation ({ commit, dispatch }) {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        const { latitude, longitude } = coords
-        const position = { latitude, longitude }
-        commit('SET_POSITION', position)
-
-        const city = getClosestCity(position)
-        if (city && city.name) {
-          dispatch('updateCity', city.name)
-        }
-      })
-    }
-  },
-
-  updateCity ({ commit }, city: string) {
-    commit('SET_CITY', city)
-  },
-
   updateKeyword ({ commit, dispatch }, q: string) {
     commit('SET_KEYWORD', q)
+  },
+
+  searchKeyword ({ commit, dispatch }, q: string) {
+    commit('SET_KEYWORD', q)
+
     commit(
       'SET_THROTTLE',
       window.setTimeout(() => {
         wrapFetch({ commit, dispatch }, async () => {
           const req: SearchRequest = { q }
           const res: SearchResponse = (await search({ q })).data || []
-          commit('SET_PRODUCTS', res.data)
+          commit('SET_PRODUCTS', res.data || [])
         })
       }, 250)
     )
@@ -66,6 +51,7 @@ const actions: ActionTree<ProductState, RootState> = {
     if (!getters.productId) {
       return
     }
+
     return wrapFetch({ commit, dispatch }, async () => {
       await dispatch('fetchCurrency')
       const req: GetProductPriceAndVotesRequest = {
@@ -78,7 +64,7 @@ const actions: ActionTree<ProductState, RootState> = {
     })
   },
 
-  async fetchCurrency ({ rootGetters }) {
+  async fetchCurrency ({ dispatch, rootGetters }) {
     // Ensure that the currency is always set.
     if (!rootGetters.currency) {
       await dispatch('postMe', null, { root: true })
@@ -95,6 +81,14 @@ const actions: ActionTree<ProductState, RootState> = {
         currency: rootGetters.currency
       }
       const res: CreateProductResponse = (await createProduct(req)).data || {}
+      return res.success
+    })
+  },
+
+  postVote ({ commit, dispatch }, { vote, productPriceId }) {
+    return wrapFetch({ commit, dispatch }, async () => {
+      const req: VoteRequest = { vote, productPriceId }
+      const res: VoteResponse = (await postVote(req)).data || {}
       return res.success
     })
   }

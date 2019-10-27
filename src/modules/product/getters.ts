@@ -8,24 +8,8 @@ import ProductPrice from '@/types/product-price'
 import Product from '@/types/product'
 
 // Models.
-import { searchCities } from '@/models/cities'
 
 const getters: GetterTree<ProductState, RootState> = {
-  city (state: ProductState): string {
-    return state.city
-  },
-
-  position (state: ProductState): Position {
-    return state.position
-  },
-
-  cities (state: ProductState): string[] {
-    if (state.city.length < 3) {
-      return []
-    }
-    return searchCities(state.city)
-  },
-
   product (state: ProductState): string {
     return state.product
   },
@@ -39,7 +23,7 @@ const getters: GetterTree<ProductState, RootState> = {
   },
 
   products (state: ProductState): Product[] {
-    return state.products
+    return state.products || []
   },
 
   productWithId (state: ProductState) {
