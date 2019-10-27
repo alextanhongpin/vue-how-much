@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="loader" :class="{ shimmer: loading }"></div>
     <main class="main">
       <app-header
         @click="goToProfile"
@@ -38,7 +39,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters(['authorized'])
+    ...mapGetters(['authorized', 'loading'])
   },
 
   methods: {
@@ -105,5 +106,26 @@ textarea {
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+.loader {
+  height: 4px;
+  width: 100%;
+  background: white;
+}
+
+.shimmer {
+  animation: shimmer 1s ease-out infinite;
+  background: linear-gradient(to right, #f7f7f7, #ccc 10%, #ddd);
+  background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -1000px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
 }
 </style>
