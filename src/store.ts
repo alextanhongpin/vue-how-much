@@ -107,7 +107,7 @@ const store: StoreOptions<RootState> = {
   },
 
   actions: {
-    async fetchAccessToken ({ commit }) {
+    fetchAccessToken ({ commit }) {
       const accessToken = getAccessToken()
       commit('SET_ACCESS_TOKEN', accessToken)
     },
