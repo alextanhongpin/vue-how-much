@@ -9,9 +9,10 @@ import {
   SUGGEST,
   THANK_YOU,
   VIEW,
+  REGISTER,
   LOGIN,
   LOGOUT
-} from '@/models/routes'
+} from '@/models/route'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: LOGIN,
       name: 'login',
       component: () => import('./views/Login.vue')
+    },
+    {
+      path: REGISTER,
+      name: 'register',
+      component: () => import('./views/Register.vue')
     },
     {
       path: LOGOUT,

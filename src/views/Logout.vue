@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { LOGIN } from '@/models/routes'
+import { LOGIN } from '@/models/route'
 import { mapActions } from 'vuex'
 
 export default Vue.extend({
