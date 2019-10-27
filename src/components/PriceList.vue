@@ -1,9 +1,7 @@
 <template>
   <div class="price-list">
     <br />
-    <div class="mono price-list-name">
-      {{ price }}
-    </div>
+    <div class="mono price-list-name">{{ currency }}{{ price }}</div>
     <div class="action-bar">
       <div>
         <b>{{ downvotes }}</b> downvotes | <b>{{ upvotes }}</b> upvotes
@@ -34,6 +32,7 @@ import Vue from 'vue'
 export default Vue.extend({
   props: {
     price: { type: Number, default: 0 },
+    currency: { type: String, default: '' },
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
     name: { type: String, default: '' },

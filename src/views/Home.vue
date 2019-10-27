@@ -21,6 +21,8 @@
         v-for="product in productPrices"
         :key="product.id"
       ></price-list>
+
+      <router-link to="/suggest">Suggest price.</router-link>
     </div>
 
     <router-view></router-view>

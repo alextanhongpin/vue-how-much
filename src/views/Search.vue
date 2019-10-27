@@ -70,14 +70,12 @@ export default Vue.extend({
     },
 
     inputKeyword (evt: KeyboardEvent) {
-      this.startSearching = true
       const target = evt.currentTarget as HTMLInputElement
       this.updateKeyword(target.value)
       this.updateProduct(null)
     },
 
     selectProduct (evt: KeyboardEvent) {
-      this.startSearching = false
       const target = evt.currentTarget as HTMLInputElement
       const id = target.dataset.id
       const product = this.productWithId(id)
