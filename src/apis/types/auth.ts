@@ -15,12 +15,3 @@ export interface PostLoginRequest {
 export interface PostLoginResponse {
   access_token: string
 }
-
-export interface PostMeRequest {
-}
-
-export interface PostMeResponse {
-  email: string
-  currency: string
-  name: string
-}

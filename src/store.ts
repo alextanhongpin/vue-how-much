@@ -10,29 +10,37 @@ import {
   setAccessToken,
   removeAccessToken
 } from '@/models/auth'
-import { postLogin, postRegister, postMe, patchCurrency } from '@/apis/auth'
+import { postLogin, postRegister } from '@/apis/auth'
+import { postMe, patchCurrency } from '@/apis/me'
 import { ApiResponse } from '@/apis/types/api'
 import {
   PostRegisterRequest,
   PostRegisterResponse,
   PostLoginRequest,
-  PostLoginResponse,
-  PostMeRequest,
-  PostMeResponse
+  PostLoginResponse
 } from '@/apis/types/auth'
+import {
+  PostMeRequest,
+  PostMeResponse,
+  PatchCurrencyRequest,
+  PatchCurrencyResponse
+} from '@/apis/types/me'
 
 Vue.use(Vuex)
 
 const delay = async (duration = 1000) =>
   new Promise(resolve => window.setTimeout(resolve, duration))
 
-async function wrapFetch ({ commit, dispatch }, fn) {
+const nullFn = () => {}
+
+async function wrapFetch ({ commit, dispatch }, fn = nullFn, onError = nullFn) {
   try {
     commit('SET_ERROR', '')
     commit('SET_LOADING', true)
     const res = await fn()
     return res
   } catch (error) {
+    onError && onError(error)
     const { data, status }: ApiErrorResponse = error.response
     commit('SET_ERROR', data.message)
     if (status === 401) return dispatch('logout')
@@ -146,20 +154,19 @@ const store: StoreOptions<RootState> = {
       commit('SET_ACCESS_TOKEN', '')
     },
 
-    async updateCurrency ({ commit }, currency: string) {
+    async updateCurrency ({ commit, dispatch }, currency: string) {
       const prevCurrency = this.currency
       commit('SET_CURRENCY', currency)
       const undo = () => commit('SET_CURRENCY', prevCurrency)
-      try {
-        const { data } = patchCurrency(currency)
-      } catch (error) {
-        undo()
-        const { data, status } = error.response
-        commit('SET_ERROR', data.message)
-        if (status === 401) {
-          return dispatch('logout')
-        }
-      }
+      return wrapFetch(
+        { commit, dispatch },
+        async () => {
+          const req: PatchCurrencyRequest = { currency }
+          const res: PatchCurrencyResponse =
+            (await patchCurrency(req)).data || {}
+        },
+        () => undo()
+      )
     }
   },
 
