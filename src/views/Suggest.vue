@@ -48,6 +48,7 @@
       <button @click="submitForm" class="button" :disabled="loading">
         Submit
       </button>
+      {{ error }}
     </form>
   </div>
 </template>
@@ -56,7 +57,7 @@ import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 export default Vue.extend({
   computed: {
-    ...mapGetters('product', ['keyword', 'loading']),
+    ...mapGetters('product', ['keyword', 'loading', 'error']),
 
     backUrl () {
       return this.$route.query.redirect || '/'
@@ -83,15 +84,12 @@ export default Vue.extend({
     },
 
     async submitForm () {
-      // const price = parseFloat(this.price)
-      // TODO: Reset keyword and product.
-      // TODO: Create product.
       this.updateKeyword('')
-      await this.createProduct({
+      const success = await this.createProduct({
         price: parseFloat(this.price),
         name: this.name
       })
-      this.$router.replace('/thank-you')
+      success && this.$router.replace('/thank-you')
     }
   }
 })

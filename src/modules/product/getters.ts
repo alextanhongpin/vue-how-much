@@ -35,11 +35,7 @@ const getters: GetterTree<ProductState, RootState> = {
   },
 
   products (state: ProductState): Product[] {
-    const keyword = state.keyword.toLowerCase()
-    if (keyword.length < 3) return []
-    return state.products.filter(product =>
-      product.name.toLowerCase().startsWith(keyword)
-    )
+    return state.products
   },
 
   productWithId (state: ProductState) {

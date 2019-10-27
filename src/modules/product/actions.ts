@@ -49,9 +49,8 @@ const actions: ActionTree<ProductState, RootState> = {
         wrapFetch({ commit, dispatch }, async () => {
           const req: SearchRequest = { q }
           const res: SearchResponse = (await search({ q })).data || []
-          console.log('searchResponse', res)
+          commit('SET_PRODUCTS', res.data)
         })
-        console.log(q, 'debounced')
       }, 250)
     )
   },
@@ -62,6 +61,7 @@ const actions: ActionTree<ProductState, RootState> = {
 
   createProduct ({ commit, dispatch, getters, rootGetters }, product: Product) {
     return wrapFetch({ commit, dispatch }, async () => {
+      // Ensure that the currency is always set.
       if (!rootGetters.currency) {
         await dispatch('postMe', null, { root: true })
       }
@@ -70,7 +70,6 @@ const actions: ActionTree<ProductState, RootState> = {
         price: product.price,
         currency: rootGetters.currency
       }
-      console.log('createproduct', req)
       const res: CreateProductResponse = (await createProduct(req)).data || {}
       return res.success
     })

@@ -31,6 +31,10 @@ const mutations: MutationTree<ProductState> = {
 
   SET_ERROR (state:ProductState, error: string) {
     state.error = error
+  },
+
+  SET_PRODUCTS(state: ProductState, products: Product[]) {
+    state.products= products
   }
 }
 export default mutations
