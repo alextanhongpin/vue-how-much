@@ -10,26 +10,38 @@ const client = axios.create({
   }
 })
 
-function withAuthHeader (headers = {}) {
-  return {
-    ...headers,
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${getAccessToken()}`
+client.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  function (error) {
+    console.error('apiError:', error.message)
+    if (error.response.status === 401) {
+      removeAccessToken()
+      window.replace('/login')
+    }
+    return Promise.reject(error)
   }
+)
+
+export async function requestPublic<T> (
+  params
+): Promise<ApiResponse<T>, ApiErrorResponse> {
+  return client.request(params)
 }
 
-export const REQUIRE_AUTH = true
-
-export default async function request<T> (
-  params,
-  withAuth = false
+export async function requestPrivate<T> (
+  params
 ): Promise<ApiResponse<T>, ApiErrorResponse> {
   const { headers = client.defaults.headers, ...rest } = params
+  // url: '/',
+  // data: {},
+  // params: {},
   return client.request({
-    // url: '/',
-    // data: {},
-    // params: {},
-    headers: withAuth ? withAuthHeader(headers) : headers,
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${getAccessToken()}`
+    },
     ...rest
   })
 }

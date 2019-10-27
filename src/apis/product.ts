@@ -1,10 +1,9 @@
-import request, { REQUIRE_AUTH } from '@/apis/base'
-
+import { requestPrivate } from '@/apis/base'
 import { ApiResponse, ApiErrorResponse } from '@/apis/types/api'
 
 // Imports the request/response pair types.
 import {
-  SearchResponse,
+  SearchRequest,
   SearchResponse,
   CreateProductRequest,
   CreateProductResponse,
@@ -15,14 +14,11 @@ import {
 export function search ({
   q
 }: SearchRequest): Promise<ApiResponse<SearchResponse>, ApiErrorResponse> {
-  return request(
-    {
-      url: '/v1/search',
-      method: 'get',
-      params: { q }
-    },
-    REQUIRE_AUTH
-  )
+  return requestPrivate<SearchResponse>({
+    url: '/v1/search',
+    method: 'get',
+    params: { q }
+  })
 }
 
 export function createProduct ({
@@ -33,18 +29,15 @@ export function createProduct ({
   ApiResponse<CreateProductResponse>,
   ApiErrorResponse
 > {
-  return request(
-    {
-      url: '/v1/products',
-      method: 'post',
-      data: {
-        name,
-        currency,
-        price
-      }
-    },
-    REQUIRE_AUTH
-  )
+  return requestPrivate<CreateProductResponse>({
+    url: '/v1/products',
+    method: 'post',
+    data: {
+      name,
+      currency,
+      price
+    }
+  })
 }
 
 export function getProductPriceAndVotes ({
@@ -54,12 +47,9 @@ export function getProductPriceAndVotes ({
   ApiResponse<GetProductPriceAndVotesResponse>,
   ApiErrorResponse
 > {
-  return request(
-    {
-      url: `/v1/products/${productId}`,
-      method: 'get',
-      params: { currency }
-    },
-    REQUIRE_AUTH
-  )
+  return requestPrivate<GetProductPriceAndVotesRequest>({
+    url: `/v1/products/${productId}`,
+    method: 'get',
+    params: { currency }
+  })
 }

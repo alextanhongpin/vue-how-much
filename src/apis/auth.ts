@@ -1,4 +1,4 @@
-import request, { REQUIRE_AUTH } from '@/apis/base'
+import { requestPublic } from '@/apis/base'
 import {
   PostRegisterRequest,
   PostRegisterResponse,
@@ -14,7 +14,7 @@ export function postLogin ({
   ApiResponse<PostLoginResponse>,
   ApiErrorResponse
 > {
-  return request<PostLoginResponse>({
+  return requestPublic<PostLoginResponse>({
     url: '/login',
     method: 'post',
     data: {
@@ -31,7 +31,7 @@ export function postRegister ({
   ApiResponse<PostRegisterResponse>,
   ApiErrorResponse
 > {
-  return request<PostRegisterResponse>({
+  return requestPublic<PostRegisterResponse>({
     url: '/register',
     method: 'post',
     data: {

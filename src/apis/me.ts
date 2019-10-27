@@ -1,4 +1,4 @@
-import request, { REQUIRE_AUTH } from '@/apis/base'
+import { requestPrivate } from '@/apis/base'
 import { ApiErrorResponse, ApiResponse } from '@/apis/types/api'
 import {
   PostMeRequest,
@@ -7,16 +7,14 @@ import {
   PatchCurrencyResponse
 } from '@/apis/types/me'
 
-export function postMe ({
-
-}: PostMeRequest): Promise<ApiResponse<PostMeResponse>, ApiErrorResponse> {
-  return request(
-    {
-      url: '/me',
-      method: 'post'
-    },
-    REQUIRE_AUTH
-  )
+export function postMe (
+  _req: PostMeRequest
+): Promise<ApiResponse<PostMeResponse>, ApiErrorResponse> {
+  console.log('posting me')
+  return requestPrivate<PostMeResponse>({
+    url: '/me',
+    method: 'post'
+  })
 }
 
 export function patchCurrency ({
@@ -25,14 +23,11 @@ export function patchCurrency ({
   ApiResponse<PatchCurrencyResponse>,
   ApiErrorResponse
 > {
-  return request<PatchCurrencyResponse>(
-    {
-      url: '/me',
-      method: 'patch',
-      data: {
-        currency
-      }
-    },
-    REQUIRE_AUTH
-  )
+  return requestPrivate<PatchCurrencyResponse>({
+    url: '/me',
+    method: 'patch',
+    data: {
+      currency
+    }
+  })
 }
