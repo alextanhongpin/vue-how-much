@@ -18,7 +18,7 @@ client.interceptors.response.use(
     console.error('apiError:', error.message)
     if (error && error.response && error.response.status === 401) {
       removeAccessToken()
-      window.replace('/login')
+      window.location.replace('/login')
     }
     return Promise.reject(error)
   }
