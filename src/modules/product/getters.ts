@@ -35,8 +35,8 @@ const getters: GetterTree<ProductState, RootState> = {
   productPrices (state: ProductState, getters): ProductPrice[] {
     return state.productPrices.map(item => {
       const votes = getters.votes || {}
-      const hasUpvote = votes[item.product_price_id] === 1
-      const hasDownvote = votes[item.product_price_id] === -1
+      const hasUpvote = votes[item.id] === 1
+      const hasDownvote = votes[item.id] === -1
       return {
         ...item,
         hasUpvote,

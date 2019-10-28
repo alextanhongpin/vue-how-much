@@ -7,7 +7,7 @@ import Product from '@/types/product'
 import { wrapFetch } from '@/modules'
 
 // Api calls.
-import { search, createProduct, getProductPriceAndVotes } from '@/apis/product'
+import { search, create, getPrices } from '@/apis/product'
 import { postVote, getVotes } from '@/apis/vote'
 import { ApiResponse } from '@/apis/types/api'
 
@@ -15,14 +15,14 @@ import { ApiResponse } from '@/apis/types/api'
 import {
   SearchRequest,
   SearchResponse,
-  CreateProductRequest,
-  CreateProductResponse,
-  GetProductPriceAndVotesRequest,
-  GetProductPriceAndVotesResponse
+  CreateRequest,
+  CreateResponse,
+  GetPricesRequest,
+  GetPricesResponse
 } from '@/apis/types/product'
 import {
-  VoteRequest,
-  VoteResponse,
+  PostVoteRequest,
+  PostVoteResponse,
   GetVotesRequest,
   GetVotesResponse
 } from '@/apis/types/vote'
@@ -49,23 +49,22 @@ const actions: ActionTree<ProductState, RootState> = {
 
   async updateProduct ({ commit, dispatch }, product: Product) {
     commit('SET_PRODUCT', product)
-    await dispatch('getProductPriceAndVotes')
+    await dispatch('getPrices')
     await dispatch('getVotes')
   },
 
-  getProductPriceAndVotes ({ commit, dispatch, getters, rootGetters }) {
+  getPrices ({ commit, dispatch, getters, rootGetters }) {
     if (!getters.productId) {
       return
     }
 
     return wrapFetch({ commit, dispatch }, async () => {
       await dispatch('fetchCurrency')
-      const req: GetProductPriceAndVotesRequest = {
+      const req: GetPricesRequest = {
         productId: getters.productId,
         currency: rootGetters.currency
       }
-      const res: GetProductPriceAndVotesResponse =
-        (await getProductPriceAndVotes(req)).data || {}
+      const res: GetPricesResponse = (await getPrices(req)).data || {}
       commit('SET_PRODUCT_PRICES', res.data || [])
     })
   },
@@ -81,20 +80,20 @@ const actions: ActionTree<ProductState, RootState> = {
     return wrapFetch({ commit, dispatch }, async () => {
       // Ensure that the currency is always set.
       await dispatch('fetchCurrency')
-      const req: CreateProductRequest = {
+      const req: CreateRequest = {
         name: product.name,
         price: product.price,
         currency: rootGetters.currency
       }
-      const res: CreateProductResponse = (await createProduct(req)).data || {}
+      const res: CreateResponse = (await create(req)).data || {}
       return res.success
     })
   },
 
   async postVote ({ commit, dispatch }, { vote, productPriceId }) {
     await wrapFetch({ commit, dispatch }, async () => {
-      const req: VoteRequest = { vote, productPriceId }
-      const res: VoteResponse = (await postVote(req)).data || {}
+      const req: PostVoteRequest = { vote, productPriceId }
+      const res: PostVoteResponse = (await postVote(req)).data || {}
       return res.success
     })
     dispatch('getVotes')

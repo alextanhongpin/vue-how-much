@@ -9,21 +9,21 @@ export interface SearchResponse {
   data: []ProductInfo
 }
 
-export interface CreateProductRequest {
+export interface CreateRequest {
   name: string
   price: number
   currency: string
 }
 
-export interface CreateProductResponse {
+export interface CreateResponse {
   success: boolean
 }
 
-export interface GetProductPriceAndVotesRequest {
+export interface GetPricesRequest {
   currency: string
   productId: string
 }
 
-export interface GetProductPriceAndVotesResponse {
+export interface GetPricesResponse {
   data: ProductPrice[]
 }

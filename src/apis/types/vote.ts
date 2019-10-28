@@ -1,11 +1,11 @@
 import Vote from '@/types/vote'
 
-export interface VoteRequest {
+export interface PostVoteRequest {
   productPriceId: string
   vote: int
 }
 
-export interface VoteResponse {
+export interface PostVoteResponse {
   success: boolean
 }
 

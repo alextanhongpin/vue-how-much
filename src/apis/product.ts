@@ -5,10 +5,10 @@ import { ApiResponse, ApiErrorResponse } from '@/apis/types/api'
 import {
   SearchRequest,
   SearchResponse,
-  CreateProductRequest,
-  CreateProductResponse,
-  GetProductPriceAndVotesRequest,
-  GetProductPriceAndVotesResponse
+  CreateRequest,
+  CreateResponse,
+  GetPricesRequest,
+  GetPricesResponse
 } from '@/apis/types/product'
 
 export function search ({
@@ -21,15 +21,12 @@ export function search ({
   })
 }
 
-export function createProduct ({
+export function create ({
   name,
   currency,
   price
-}: CreateProductRequest): Promise<
-  ApiResponse<CreateProductResponse>,
-  ApiErrorResponse
-> {
-  return requestPrivate<CreateProductResponse>({
+}: CreateRequest): Promise<ApiResponse<CreateResponse>, ApiErrorResponse> {
+  return requestPrivate<CreateResponse>({
     url: '/v1/products',
     method: 'post',
     data: {
@@ -40,14 +37,14 @@ export function createProduct ({
   })
 }
 
-export function getProductPriceAndVotes ({
+export function getPrices ({
   productId,
   currency
-}: GetProductPriceAndVotesRequest): Promise<
-  ApiResponse<GetProductPriceAndVotesResponse>,
+}: GetPricesRequest): Promise<
+  ApiResponse<GetPricesResponse>,
   ApiErrorResponse
 > {
-  return requestPrivate<GetProductPriceAndVotesRequest>({
+  return requestPrivate<GetPricesResponse>({
     url: `/v1/products/${productId}`,
     method: 'get',
     params: { currency }

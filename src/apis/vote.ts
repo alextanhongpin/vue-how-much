@@ -2,18 +2,24 @@ import { requestPrivate } from '@/apis/base'
 
 // Types.
 import { ApiResponse, ApiErrorResponse } from '@/apis/types/api'
-import { VoteRequest, VoteResponse } from '@/apis/types/vote'
+import {
+  PostVoteRequest,
+  PostVoteResponse,
+  GetVotesRequest,
+  GetVotesResponse
+} from '@/apis/types/vote'
 
 // Apis.
 export function postVote ({
   productPriceId,
   vote
-}: VoteRequest): Promise<ApiResponse<VoteResponse>, ApiErrorResponse> {
-  return requestPrivate<VoteResponse>({
-    url: `/v1/prices/${productPriceId}/votes`,
+}: PostVoteRequest): Promise<ApiResponse<PostVoteResponse>, ApiErrorResponse> {
+  return requestPrivate<PostVoteResponse>({
+    url: `/v1/votes`,
     method: 'post',
     data: {
-      vote
+      vote,
+      product_price_id: productPriceId
     }
   })
 }
